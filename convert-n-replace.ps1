@@ -2,7 +2,7 @@ $Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding($False)
     $source = "path"
     $destination = "output"
 
-    foreach ($i in Get-ChildItem -Path $source -Include *.htm* -Recurse -Force) {
+    foreach ($i in Get-ChildItem -Path $source -Include *.*htm* -Recurse -Force) {
         if ($i.PSIsContainer) {
             continue
         }
@@ -19,10 +19,15 @@ $Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding($False)
         if ( $content -ne $null ) {
             
             $content = $content -replace '(charset=.*")','charset=UTF-8"' 
-            Write-Host $name
+            # Write-Host $name # uncomment for Debug output
             [System.IO.File]::WriteAllLines($name, $content, $Utf8NoBomEncoding)
             
         } else {
             Write-Host "No content from: $i"   
         }
     }
+	
+	
+Write-Host "Finished. Press any key to continue ..."
+
+$x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
