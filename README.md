@@ -7,4 +7,4 @@ Starten:
 Rechtsklick mit Powershell ausführen
 
 Debug output:
-# entfernen in Zeile 22
+ # entfernen in Zeile 22
