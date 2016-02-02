@@ -1,3 +1,4 @@
+$sw = [Diagnostics.Stopwatch]::StartNew()
 $Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding($True)
 $source = "path"
 $destination = "output"
@@ -93,6 +94,8 @@ $characterMapReplace.yacute = "Ã½"
 $characterMapReplace.thorn = "Ã¾"
 $characterMapReplace.yuml = "Ã¿"
 
+
+
 #Wodurch ersetzt wird (HTML Sonderzeichen funktioniert zuverlässiger)
 $characterMapChar = New-Object system.collections.hashtable
 $characterMapChar.AnfZU = "&bdquo;"	#Anführungszeichen unten
@@ -185,6 +188,8 @@ $characterMapChar.yacute = "&yacute;"
 $characterMapChar.thorn = "&thorn;"
 $characterMapChar.yuml = "&yuml;"
 
+
+  
 foreach ($i in Get-ChildItem -Path $source -Include *.*htm* -Recurse -Force) {
     if ($i.PSIsContainer) {
 		continue
@@ -257,7 +262,9 @@ foreach ($i in Get-ChildItem -Path $source -Include *.*htm* -Recurse -Force) {
 		Write-Host "No content from: $i"   
 	}
 }
+	
+$sw.Stop()
 
-Write-Host "Finished. Press any key to continue ..."
+Write-Host "Finished. Time elapsed $($sw.Elapsed) Press any key to continue ..."
 
 $x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
