@@ -233,7 +233,7 @@ foreach ($i in Get-ChildItem -Path $source -Include *.*htm* -Recurse -Force) {
 	 elseif ($byte[0] -eq 0x84 -and $byte[1] -eq 0x31 -and $byte[2] -eq 0x95 -and $byte[3] -eq 0x33)
 	 { $encoding = "GB-18030" }
 	
-	Write-Host "$($i.Fullname) Encoding=$($encoding)"# uncomment for Debug output
+	#Write-Host "$($i.Fullname) Encoding=$($encoding)"# uncomment for Debug output
 	
 	if($encoding -eq "UTF8") {
 		continue
