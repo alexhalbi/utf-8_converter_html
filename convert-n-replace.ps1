@@ -1,3 +1,7 @@
+#Alexander Halbarth ET10/15 03.02.2015
+#PowerShell Skript zum konvertieren von diversen HTML Dateien in UTF-8
+#ACHTUNG: Das File muss als UTF-8 mit BOM gespeichert werden!! Kann in Notepad++ konvertiert werden
+
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding($True)
 $source = "path"
@@ -94,8 +98,6 @@ $characterMapReplace.yacute = "Ã½"
 $characterMapReplace.thorn = "Ã¾"
 $characterMapReplace.yuml = "Ã¿"
 
-
-
 #Wodurch ersetzt wird (HTML Sonderzeichen funktioniert zuverlässiger)
 $characterMapChar = New-Object system.collections.hashtable
 $characterMapChar.AnfZU = "&bdquo;"	#Anführungszeichen unten
@@ -187,8 +189,6 @@ $characterMapChar.uuml = "&uuml;"
 $characterMapChar.yacute = "&yacute;"
 $characterMapChar.thorn = "&thorn;"
 $characterMapChar.yuml = "&yuml;"
-
-
   
 foreach ($i in Get-ChildItem -Path $source -Include *.*htm* -Recurse -Force) {
     if ($i.PSIsContainer) {
