@@ -1,11 +1,11 @@
-#Alexander Halbarth ET10/15 03.02.2015
+﻿#Alexander Halbarth ET10/15 03.02.2015
 #PowerShell Skript zum konvertieren von diversen HTML Dateien in UTF-8
 #ACHTUNG: Das File muss als UTF-8 mit BOM gespeichert werden!! Kann in Notepad++ konvertiert werden
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
-$Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding($True)
-$source = "path"
-$destination = "output"
+$Utf8Encoding = New-Object System.Text.UTF8Encoding($True)
+$source = "C:\Users\Alexander\Desktop\TEST\path"			#am Ende ein KEIN \ !!!
+$destination = "C:\Users\Alexander\Desktop\TEST\output"		#am Ende ein KEIN \ !!!
 
 #Buchstaben welche ersetzt werden sollen: (Regex werden akzeptiert!)
 $characterMapReplace = New-Object system.collections.hashtable
@@ -238,12 +238,12 @@ foreach ($i in Get-ChildItem -Path $source -Include *.*htm* -Recurse -Force) {
 	if($encoding -eq "UTF8") {
 		continue
 	}
-
-	$path = $i.DirectoryName -replace $source, $destination
-	$name = $i.Fullname -replace $source, $destination
-
-	if ( !(Test-Path $path) ) {
-		New-Item -Path $path -ItemType directory
+	
+	$outputpath = $i.DirectoryName -replace [regex]::Escape($source), $destination
+	$outputFullname = "$($outputpath)\$($i.Name)"
+	#Write-Host "Writing to: $($outputFullname)"# uncomment for Debug output
+	if ( !(Test-Path $outputpath) ) {
+		New-Item -Path $outputpath -ItemType directory
 	}
 
 	$content = get-content $i.Fullname
@@ -257,7 +257,7 @@ foreach ($i in Get-ChildItem -Path $source -Include *.*htm* -Recurse -Force) {
 			}
 		}
 		
-		[System.IO.File]::WriteAllLines($name, $content, $Utf8NoBomEncoding)
+		[System.IO.File]::WriteAllLines($outputFullname, $content, $Utf8Encoding)
 	} else {
 		Write-Host "No content from: $i"   
 	}
