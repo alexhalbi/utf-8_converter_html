@@ -1,12 +1,15 @@
 ﻿#Alexander Halbarth ET10/15 03.02.2015
-#PowerShell Skript zum konvertieren von diversen HTML Dateien in UTF-8
+#PowerShell Script to convert HTML Files to UTF-8 wirth BOM
+#CAUTION: This Script has to be saved as UTF-8 with BOM to be executable (use Notepad++ to convert)!!!
+#PowerShell Skript zum konvertieren von HTML Dateien in UTF-8 mit BOM
 #ACHTUNG: Das File muss als UTF-8 mit BOM gespeichert werden!! Kann in Notepad++ konvertiert werden
 
 $sw = [Diagnostics.Stopwatch]::StartNew()
 $Utf8Encoding = New-Object System.Text.UTF8Encoding($True)
-$source = "C:\Users\Alexander\Desktop\TEST\path"			#am Ende ein KEIN \ !!!
-$destination = "C:\Users\Alexander\Desktop\TEST\output"		#am Ende ein KEIN \ !!!
+$source = "C:\Users\Alexander\Desktop\TEST\path"			#no trailing \ !!! am Ende ein KEIN \ !!!
+$destination = "C:\Users\Alexander\Desktop\TEST\output"		#no trailing \ !!! am Ende ein KEIN \ !!!
 
+#Characters wich should be replaced (Regex are accepted!)
 #Buchstaben welche ersetzt werden sollen: (Regex werden akzeptiert!)
 $characterMapReplace = New-Object system.collections.hashtable
 $characterMapReplace.AnfZU = 'â€ž'			#Anführungszeichen unten
@@ -98,6 +101,7 @@ $characterMapReplace.yacute = "Ã½"
 $characterMapReplace.thorn = "Ã¾"
 $characterMapReplace.yuml = "Ã¿"
 
+#Replacement Character (HTML special characters)
 #Wodurch ersetzt wird (HTML Sonderzeichen funktioniert zuverlässiger)
 $characterMapChar = New-Object system.collections.hashtable
 $characterMapChar.AnfZU = "&bdquo;"	#Anführungszeichen unten
@@ -256,7 +260,7 @@ foreach ($i in Get-ChildItem -Path $source -Include *.*htm* -Recurse -Force) {
 	# Set HTML File encoding
 	if ( $content -ne $null ) {
 		$content = $content -replace '(charset=.*")','charset=UTF-8"' 
-		if($encoding -eq ''){	#Wenn Encoding nicht erkannt wurde Failover ersetzen aller Sonderzeichen
+		if($encoding -eq ''){	#If encoding is not recognized then Failover replacing all special characters
 			foreach ($key in $characterMapReplace.Keys) {
 				$content = $content -replace $characterMapReplace[$key], $characterMapChar[$key]
 			}
