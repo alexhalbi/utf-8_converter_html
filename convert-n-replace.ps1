@@ -199,6 +199,11 @@ foreach ($i in Get-ChildItem -Path $source -Include *.*htm* -Recurse -Force) {
 	
 	[byte[]]$byte = get-content -Encoding byte -ReadCount 4 -TotalCount 4 -Path $i.Fullname
 
+	if($byte.Length -lt 3) {
+		Write-Host "File Empty: $($i.Fullname)"
+		continue
+	}
+
 	 # EF BB BF (UTF8)
 	 if ( $byte[0] -eq 0xef -and $byte[1] -eq 0xbb -and $byte[2] -eq 0xbf )
 	 { $encoding = "UTF8" }
